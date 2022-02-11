@@ -1,0 +1,176 @@
+float baseH = 20;
+
+float arm1W = 15;
+float arm1D = 15;
+float arm1L = 20;
+
+float arm2W = 10;
+float arm2D = 10;
+float arm2L = 30;
+
+float arm3W = 30;
+float arm3D = 0;
+float arm3L = 10;
+
+
+float armW1 = 10;
+float armW2 = 10;
+float armW3 = 5;
+
+float position0 = 0;
+float position1 = 0;
+
+float angle1 = 0;
+float angle2 = 0;
+float angle3 = 0;
+float l3 = 0;
+
+float dif = 1.0;
+
+float rad = 0;
+
+
+void setup(){
+  size(1200, 800, P3D);
+  //background(255);
+  
+  camera(100, 100, 100, 0, 0, 0, 0, 0, -1);
+  
+  noStroke();  
+}
+
+void draw(){
+  rad = rad + 1;
+  
+  background(255);
+
+
+  if(keyPressed){
+    if(key == 's'){
+      position1 = position1 + dif;
+      if(position1 > 75){
+        position1 = 75;
+      }
+    }
+    if(key == 'S'){
+      position1 = position1 - dif;
+      if(position1 < -100){
+        position1 = -100;
+      }
+    }
+    if(key == 'w'){
+      position0 = position0 + dif;
+      if(position0 > 75){
+        position0 = 75;
+      }
+    }
+    if(key == 'W'){
+      position0 = position0 - dif;
+      if(position0 < -100){
+        position0 = -100;
+      }
+    }
+    if(key == 'a'){
+      angle1 = angle1 + dif;
+    }
+    if(key == 'A'){
+      angle1 = angle1 - dif;
+    }
+    if(key == 'c'){
+      angle2 = angle2 + dif;
+      if(angle2 > 90){
+        angle2 = 90;
+      }
+    }
+    if(key == 'C'){
+      angle2 = angle2 - dif;
+      if(angle2 < -90){
+        angle2 = -90;
+      }
+    }
+    if(key == 'd'){
+      angle3 = angle3 + dif;
+      if(angle3 > 90){
+        angle3 = 90;
+      }
+    }
+    if(key == 'D'){
+      angle3 = angle3 - dif;
+      if(angle3 < -90){
+        angle3 = -90;
+      }
+    }
+    if(key == 'R'){
+      position0 = 0;
+      position1 = 0;
+      angle1 = 0;
+      angle2 = 0;
+      angle3 = 0;
+    }
+  }
+  
+  
+  translate(position0, position1, 0);
+  xyzAxis(20); 
+  translate(0,0,baseH/2);
+  fill(150);
+  box(30,30,baseH);
+  
+  
+  rotateZ(radians(angle1));
+  translate(0,0,baseH/2+arm1L/2);
+  fill(125);
+  box(arm1W,arm1D,arm1L);
+  
+ 
+  translate(0,0,0);
+  rotateX(radians(angle2));  
+  
+  translate(0,0,arm2L/2);
+  fill(175);
+  box(arm2W,arm2D,arm2L);
+  
+ 
+  translate(0, 0, arm2L/2);
+  rotateX(radians(-90+angle3));
+
+  translate(0, -arm2D, 0);
+  fill(200);
+ pillar(arm3W, arm3D , arm3L);   
+}
+void pillar(float length, float radius1, float radius2){
+
+float x,y,z;
+pushMatrix();
+beginShape(TRIANGLE_FAN);
+y = -length / 2;
+vertex(0, y, 0);
+for(int deg = 0; deg <= 360; deg = deg + 10){
+x = cos(radians(deg)) * radius1;
+z = sin(radians(deg)) * radius1;
+vertex(x, y, z);
+}
+endShape();              
+beginShape(TRIANGLE_FAN);
+y = length / 2;
+vertex(0, y, 0);
+for(int deg = 0; deg <= 360; deg = deg + 10){
+x = cos(radians(deg)) * radius2;
+z = sin(radians(deg)) * radius2;
+vertex(x, y, z);
+}
+endShape();
+beginShape(TRIANGLE_STRIP);
+for(int deg =0; deg <= 360; deg = deg + 5){
+x = cos(radians(deg)) * radius1;
+y = -length / 2;
+z = sin(radians(deg)) * radius1;
+vertex(x, y, z);
+x = cos(radians(deg)) * radius2;
+y = length / 2;
+z = sin(radians(deg)) * radius2;
+vertex(x, y, z);
+}
+endShape();
+popMatrix();
+}  
